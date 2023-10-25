@@ -1,0 +1,2 @@
+# LeetCode
+Coding is Life.
