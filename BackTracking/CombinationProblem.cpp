@@ -132,3 +132,63 @@ private:
 
 // 时间复杂度: O(3^m * 4^n)，其中 m 是对应四个字母的数字个数，n 是对应三个字母的数字个数
 // 空间复杂度: O(3^m * 4^n)
+
+// LeetCode 39
+// version 1
+class Solution {
+public:
+
+    void backTracking(vector<int>& candidates, int target, int sum, int index){
+        if(sum > target) return;
+        if(target == sum){
+            ans.emplace_back(vec);
+            return;
+        }
+
+        for(int i = index; i < candidates.size(); ++i){
+            sum += candidates[i];
+            vec.emplace_back(candidates[i]);
+            backTracking(candidates, target, sum, i);
+            sum -= candidates[i];
+            vec.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target){
+        backTracking(candidates, target, 0, 0);
+        return ans;
+    }
+
+private:
+    vector<vector<int>> ans;
+    vector<int> vec;
+};
+
+// version 2
+class Solution {
+public:
+
+    void backTracking(vector<int>& candidates, int target, int sum, int index){
+        //if(sum > target) return;
+        if(target == sum){
+            ans.emplace_back(vec);
+            return;
+        }
+
+        for(int i = index; i < candidates.size() && sum + candidates[i] <= target; ++i){
+            sum += candidates[i];
+            vec.emplace_back(candidates[i]);
+            backTracking(candidates, target, sum, i);
+            sum -= candidates[i];
+            vec.pop_back();
+        }
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target){
+        sort(candidates.begin(), candidates.end());
+        backTracking(candidates, target, 0, 0);
+        return ans;
+    }
+
+private:
+    vector<vector<int>> ans;
+    vector<int> vec;
+};
