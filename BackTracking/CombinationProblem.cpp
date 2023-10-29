@@ -192,3 +192,42 @@ private:
     vector<vector<int>> ans;
     vector<int> vec;
 };
+
+// LeetCode 39
+
+class Solution {
+public:
+
+    void backTracing(vector<int>& candidates, int target, int sum, int index, vector<bool>& flag){
+        if(sum == target){
+            ans.emplace_back(vec);
+            return;
+        }
+
+        for(int i = index; i < candidates.size() && sum + candidates[i] <= target; ++i){
+            if(i > 0 && candidates[i - 1] == candidates[i] && flag[i - 1] == false){
+                continue;
+            }
+            sum += candidates[i];
+            vec.emplace_back(candidates[i]);
+            flag[i] = true;
+            backTracing(candidates, target, sum, i + 1, flag);
+            sum -= candidates[i];
+            vec.pop_back();
+            flag[i] = false;
+        }
+    }
+
+    vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
+        vector<bool> flag(candidates.size(), false);
+        sort(candidates.begin(), candidates.end());
+        backTracing(candidates, target, 0, 0, flag);
+        return ans;
+    }
+
+private:
+    vector<vector<int>> ans;
+    vector<int> vec;
+};
+
+// 时间复杂度: O(n * 2^n) 空间复杂度: O(n)
