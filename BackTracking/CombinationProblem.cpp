@@ -231,3 +231,35 @@ private:
 };
 
 // 时间复杂度: O(n * 2^n) 空间复杂度: O(n)
+
+
+class Solution {
+public:
+    // left是左括号 right是右括号
+    void backTracking(int n, int left, int right){
+        // 终止条件 当string长度为给定值n的两倍时，说明已经回溯完了
+        if(path.size() == 2 * n){
+            ans.emplace_back(path);
+        }
+        // 一般的回溯这里是一个for循环
+        // 其实这里只是把for循环给拆开了，因为每个分支的条件不同
+        if(left < n){// 加入左括号的条件
+            path += '(';
+            backTracking(n, left + 1, right);
+            path.pop_back();
+        }
+        if(right < left){// 加入右括号的条件
+            path += ')';
+            backTracking(n, left, right + 1);
+            path.pop_back();
+        }
+    }
+
+    vector<string> generateParenthesis(int n) {
+        backTracking(n, 0, 0);
+        return ans;
+    }
+private:
+    vector<string> ans;
+    string path;
+};
