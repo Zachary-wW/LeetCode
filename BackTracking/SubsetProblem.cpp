@@ -66,3 +66,39 @@ private:
     vector<vector<int>> ans;
     vector<int> path;
 };
+
+// 原数组不能使用排序后设置flag数组去重下 如何去重
+
+class Solution {
+public:
+
+    void backTracking(vector<int>& nums, int index){
+        //终止条件 子集问题需要将每个符合条件的节点都加入
+        if(path.size() > 1){
+            ans.emplace_back(path);
+            //不用return
+        }
+        unordered_set<int> uset;
+        for(int i = index; i < nums.size(); ++i){
+            // 处理节点 不符合递增 & 本层重复元素 跳过
+            if((!path.empty() && path.back() > nums[i]) || 
+                (uset.find(nums[i]) != uset.end())){
+                    continue;
+                }// 第一部分条件 首先要保证递增 那就是path.back() <= nums[i] 不满足就跳过 但是别忘记要确保path.back不为空吧
+            //
+            uset.insert(nums[i]); // 不用erase 递归到下一层uset就清空了
+            path.emplace_back(nums[i]);
+            backTracking(nums, i + 1);
+            path.pop_back();
+        }
+    }
+
+    vector<vector<int>> findSubsequences(vector<int>& nums) {
+        backTracking(nums, 0);
+        return ans;
+    }
+
+private:
+    vector<vector<int>> ans;
+    vector<int> path;
+};
