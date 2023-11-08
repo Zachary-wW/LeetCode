@@ -47,3 +47,52 @@ public:
 };
 
 //
+class LC62 {
+public:
+    int uniquePaths(int m, int n) {
+        vector<vector<int>> dp(m + 1, vector<int>(n + 1));// dp数组的含义就是走到第[i][j]个方格的路径数
+        
+        for(int i = 0; i < m; ++i){
+            dp[i][0] = 1;
+        }
+        for(int j = 0; j < n; ++j){
+            dp[0][j] = 1;
+        }// 初始化dp数组 由于在边界处只有一种方法可以走
+        
+        for(int i = 1; i < m; ++i){
+            for(int j = 1; j < n; ++j){
+                dp[i][j] = dp[i - 1][j] + dp[i][j - 1]; //向右或者向下
+            }
+        }
+        return dp[m][n];
+
+    }
+};
+
+class LC63 {
+public:
+    int uniquePathsWithObstacles(vector<vector<int>>& obstacleGrid) {
+        int m = obstacleGrid.size();
+        int n = obstacleGrid[0].size();
+        
+        if(obstacleGrid[0][0] == 1 || obstacleGrid[m - 1][n - 1] == 1) return 0;
+        
+        vector<vector<int>> dp(m, vector<int>(n, 0));// 注意需要将dp初始化为0 如果有障碍物就不能更新到dp
+
+        for(int i = 0; i < m && obstacleGrid[i][0] == 0; ++i){
+            dp[i][0] = 1;
+        }
+        for(int j = 0; j < n && obstacleGrid[0][j] == 0; ++j){
+            dp[0][j] = 1;
+        }// 初始化数组 如果按序遍历的过程中遇到障碍物 后面都不用赋值了 说明到达不了
+
+        for(int i = 1; i < m; ++i){
+            for(int j = 1; j < n; ++j){
+                if(obstacleGrid[i][j] == 0){// 没有障碍物时才赋值
+                    dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+                }
+            }
+        }
+        return dp[m - 1][n - 1];
+    }
+};
