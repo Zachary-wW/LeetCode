@@ -96,3 +96,38 @@ public:
         return dp[m - 1][n - 1];
     }
 };
+
+//
+class LC343 {
+public:
+    int integerBreak(int n) {
+        if(n < 2) return n;
+
+        vector<int> dp(n + 1);// dp数组的含义就是第i个整数拆分最大值
+        dp[2] = 1;// 0和1没有意义 它们不能拆分
+
+        for(int i = 3;i <= n; ++i){// 从3开始
+            for(int j = 1; j < i; ++j){// j就是相当于上一个转移状态
+                dp[i] = max(dp[i], max(dp[i - j] * j, (i - j) * j));
+            }
+        }
+
+        return dp[n];
+    }
+};
+
+//
+class Solution {
+public:
+    int numTrees(int n) {
+        vector<int> dp(n + 1); //dp数组的含义就是第i个数BST的数量
+        dp[0] = 1;// 初始化 如果dp0为0的话dp1也为0不满足条件
+
+        for(int i = 1; i <= n; ++i){
+            for(int j = 1; j <= i; ++j){// 推导出来的
+                dp[i] += dp[j - 1] * dp[i - j];
+            }
+        }
+        return dp[n];
+    }
+};
